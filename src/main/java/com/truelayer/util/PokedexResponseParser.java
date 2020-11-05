@@ -32,8 +32,8 @@ public final class PokedexResponseParser {
         descriptionsNodes.forEachRemaining(description -> {
             if (description.at("/language/name").asText().equals(ENGLISH.getLanguage())) {
                 descriptions.add(description.get("flavor_text").toString()
-                    .replaceAll(NEW_LINE_PATTERN, "")
-                    .replaceAll(FORM_FEED_PATTERN, ""));
+                    .replaceAll(NEW_LINE_PATTERN, " ")
+                    .replaceAll(FORM_FEED_PATTERN, " "));
             }
         });
 

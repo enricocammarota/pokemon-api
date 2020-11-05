@@ -12,21 +12,17 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.truelayer.util.PokedexResponseParser.pokedexAPIJsonParsing;
 import static java.util.Optional.empty;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
 
 @Service
 @Slf4j
 @AllArgsConstructor
 public class PokemonService {
 
-    private final PokedexConfig pokedexConfig;
-
-    private final ShakespeareConfig shakespeareConfig;
-
     private static final String REG_EX_PATTERN = "[\\\\|\"]";
-
+    private final PokedexConfig pokedexConfig;
+    private final ShakespeareConfig shakespeareConfig;
     @Autowired
     private final RestAPIService restAPIService;
 
@@ -45,19 +41,19 @@ public class PokemonService {
     private String getPokedexDescription(String pokemonName) {
         log.info("Querying Pokemon description for {} from pokedex", pokemonName);
 
-        JsonNode rootNode = restAPIService.restCall(pokedexConfig.getEndpoint(), pokemonName, GET);
+        JsonNode rootNode = restAPIService.restCall(pokedexConfig.getEndpoint(), pokemonName);
         if (rootNode != null) {
             JsonNode responseNode = rootNode.findValue(pokedexConfig.getNodeToBeFound());
-            return PokedexResponseParser.pokedexAPIJsonParsing(pokemonName, responseNode);
+            return pokedexAPIJsonParsing(pokemonName, responseNode);
         } else {
-            return  null;
+            return null;
         }
     }
 
     private String getShakespeareanDescription(String pokemonName, String pokedexDescription) {
         log.info("Querying Shakespearean description for {}", pokemonName);
 
-        JsonNode rootNode = restAPIService.restCall(shakespeareConfig.getEndpoint(), pokedexDescription, POST);
+        JsonNode rootNode = restAPIService.restCall(shakespeareConfig.getEndpoint(), pokedexDescription);
         if (rootNode != null) {
             JsonNode responseNode = rootNode.at(shakespeareConfig.getNodeToBeFound());
             return responseNode.toString().replaceAll(REG_EX_PATTERN, "");

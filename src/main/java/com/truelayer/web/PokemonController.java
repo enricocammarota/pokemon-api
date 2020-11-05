@@ -41,7 +41,9 @@ public class PokemonController {
         })
     @GetMapping("/{pokemonName}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Pokemon> getPokemonShakespeareanDescription(@PathVariable @ApiParam(value = "The pokemon name", name = "pokemonName", required = true) final String pokemonName) {
+    public ResponseEntity<Pokemon> getPokemonShakespeareanDescription(
+        @PathVariable @ApiParam(value = "The pokemon name", name = "pokemonName", required = true) final String pokemonName) {
+
         log.info("Request for Pokemon {} shakespearean description received", pokemonName);
         return pokemonService.getPokemonShakespeareanDescription(pokemonName)
             .map(ResponseEntity::ok)
