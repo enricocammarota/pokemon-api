@@ -13,7 +13,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import static springfox.documentation.spi.DocumentationType.SWAGGER_2;
 
 @Configuration
-@SuppressWarnings( {"PMD.MethodNamingConventions"})
 @EnableSwagger2
 @Import(BeanValidatorPluginsConfiguration.class)
 public class SwaggerConfig {
