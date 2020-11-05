@@ -20,6 +20,7 @@ public class RestAPIService {
 
     JsonNode restCall(String endpoint, String field, HttpMethod method) {
         log.info("Performing rest call to {}", endpoint);
+
         RestTemplate restTemplate = new RestTemplate();
         ObjectMapper mapper = new ObjectMapper();
 
@@ -43,7 +44,7 @@ public class RestAPIService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.add("user-agent",
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36");
         return headers;
     }
 }

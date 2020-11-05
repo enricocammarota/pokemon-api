@@ -30,20 +30,12 @@ public class PokemonService {
 
     public Optional<Pokemon> getPokemonShakespeareanDescription(final String pokemonName) {
         String description = getDescription(pokemonName);
-
-        if (description == null) {
-            return empty();
-        } else {
-            return Optional.of(new Pokemon(pokemonName, description));
-        }
+        return description == null ? empty() : Optional.of(new Pokemon(pokemonName, description));
     }
 
     private String getDescription(String pokemonName) {
         String pokedexDescription = getPokedexDescription(pokemonName);
-        if (pokedexDescription != null) {
-            return getShakespeareanDescription(pokemonName, pokedexDescription);
-        }
-        return null;
+        return pokedexDescription != null ? getShakespeareanDescription(pokemonName, pokedexDescription) : null;
     }
 
     private String getPokedexDescription(String pokemonName) {
@@ -58,8 +50,6 @@ public class PokemonService {
         JsonNode rootNode = restAPIService.restCall(shakespeareConfig.getEndpoint(), pokedexDescription, POST);
         JsonNode responseNode = rootNode.at(shakespeareConfig.getNodeToBeFound());
         return responseNode.toString()
-//            .replaceAll("\\\\n", "")
-//            .replaceAll("\"", "")
             .replaceAll("[\\\\|\"]","");
     }
 

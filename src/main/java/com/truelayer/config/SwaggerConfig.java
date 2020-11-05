@@ -29,7 +29,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
             .title("Welcome to the REST API for Pokemon Shakespearean microservice.")
-            .description("This API allows you to perform Pokemon descriptions in a Shakesperian form.")
+            .description("This API allows you to perform Pokemon descriptions in a Shakespearean form.")
             .build();
     }
 }
