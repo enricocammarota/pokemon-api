@@ -38,6 +38,6 @@ public final class PokedexResponseParser {
         });
 
         log.info("Finished Pokedex response parsing for {}!", pokemonName);
-        return descriptions.get(random.nextInt(descriptions.size()));
+        return descriptions.size() > 0 ? descriptions.get(random.nextInt(descriptions.size())) : null;
     }
 }

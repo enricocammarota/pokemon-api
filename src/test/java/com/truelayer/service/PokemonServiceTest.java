@@ -1,6 +1,5 @@
 package com.truelayer.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.truelayer.config.PokedexConfig;
@@ -66,22 +65,43 @@ class PokemonServiceTest {
     }
 
     @Test
-    void correctlyReturnsNoDescriptionIfPokemonDoesNotExist() {
+    void returnsNoDescriptionIfPokemonDoesNotExist() {
         String pokemonName = "foo";
+        String expectedPokemonDescription = "";
 
         when(pokedexConfig.getEndpoint()).thenReturn(POKEDEX_URL);
         when(restAPIService.restCall(POKEDEX_URL, pokemonName)).thenReturn(null);
 
         Optional<Pokemon> pokemon = pokemonService.getPokemonShakespeareanDescription(pokemonName);
         pokemon.ifPresent(p -> {
-            assertEquals("", p.getDescription());
+            assertEquals(expectedPokemonDescription, p.getDescription());
+        });
+    }
+
+    @Test
+    void returnsNoDescriptionIfShakespeareParsingFails() throws IOException {
+        String pokemonName = "Charmander";
+        String description = "\"Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.\"";
+        String expectedPokemonDescription = "";
+
+        JsonNode pokedexResponseNodes = generateResponseNodes("pokedex-response.json");
+
+        when(pokedexConfig.getEndpoint()).thenReturn(POKEDEX_URL);
+        when(restAPIService.restCall(POKEDEX_URL, pokemonName)).thenReturn(pokedexResponseNodes);
+        when(pokedexConfig.getNodeToBeFound()).thenReturn(POKEDEX_NODE);
+        when(shakespeareConfig.getEndpoint()).thenReturn(SHAKESPEARE_URL);
+        when(restAPIService.restCall(SHAKESPEARE_URL, description)).thenReturn(null);
+
+        Optional<Pokemon> pokemon = pokemonService.getPokemonShakespeareanDescription(pokemonName);
+        pokemon.ifPresent(p -> {
+            assertEquals(expectedPokemonDescription, p.getDescription());
         });
     }
 
     private JsonNode generateResponseNodes(String fileName) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        String filePathPodex = Paths.get("src", "test", "resources").toString() + separator + fileName;
-        String response = FileUtils.readFileToString(new File(filePathPodex), "UTF-8");
+        String filePathPokedex = Paths.get("src", "test", "resources").toString() + separator + fileName;
+        String response = FileUtils.readFileToString(new File(filePathPokedex), "UTF-8");
         return mapper.readTree(response);
     }
 
