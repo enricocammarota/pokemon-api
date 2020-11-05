@@ -56,7 +56,7 @@ public class PokemonService {
         JsonNode rootNode = restAPIService.restCall(shakespeareConfig.getEndpoint(), pokedexDescription);
         if (rootNode != null) {
             JsonNode responseNode = rootNode.at(shakespeareConfig.getNodeToBeFound());
-            return responseNode.toString().replaceAll(REG_EX_PATTERN, "");
+            return responseNode.toString().replaceAll(REG_EX_PATTERN, " ");
         } else {
             return null;
         }
