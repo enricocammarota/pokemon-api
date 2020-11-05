@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(value = PokemonController.class)
 @ContextConfiguration(classes = {PokemonServiceApplication.class})
-public class PokemonControllerTest {
+class PokemonControllerTest {
 
     private static final String GET_POKEMON_SHAKESPEAREAN_DESCRIPTION_URL = "/pokemon";
     private static final String POKEDEX_API_URL = "http://foo";

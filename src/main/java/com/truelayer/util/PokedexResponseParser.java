@@ -27,17 +27,23 @@ public final class PokedexResponseParser {
         log.info("Started Pokedex response parsing for {}", pokemonName);
 
         List<String> descriptions = new ArrayList<>();
-        Iterator<JsonNode> descriptionsNodes = locatedNode.elements();
 
-        descriptionsNodes.forEachRemaining(description -> {
-            if (description.at("/language/name").asText().equals(ENGLISH.getLanguage())) {
-                descriptions.add(description.get("flavor_text").toString()
-                    .replaceAll(NEW_LINE_PATTERN, " ")
-                    .replaceAll(FORM_FEED_PATTERN, " "));
-            }
-        });
+        if(locatedNode != null) {
+            Iterator<JsonNode> descriptionsNodes = locatedNode.elements();
 
-        log.info("Finished Pokedex response parsing for {}!", pokemonName);
-        return descriptions.size() > 0 ? descriptions.get(random.nextInt(descriptions.size())) : null;
+            descriptionsNodes.forEachRemaining(description -> {
+                if (description.at("/language/name").asText().equals(ENGLISH.getLanguage())) {
+                    descriptions.add(description.get("flavor_text").toString()
+                        .replaceAll(NEW_LINE_PATTERN, " ")
+                        .replaceAll(FORM_FEED_PATTERN, " "));
+                }
+            });
+
+            log.info("Finished Pokedex response parsing for {}!", pokemonName);
+            return descriptions.size() > 0 ? descriptions.get(random.nextInt(descriptions.size())) : null;
+        }
+
+        log.warn("No descriptions available from the Pokedex!");
+        return null;
     }
 }

@@ -1,23 +1,20 @@
 package com.truelayer.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.truelayer.TestHelper;
 import com.truelayer.config.PokedexConfig;
 import com.truelayer.config.ShakespeareConfig;
 import com.truelayer.domain.Pokemon;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Optional;
 
-import static java.io.File.separator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -43,13 +40,13 @@ class PokemonServiceTest {
 
     @Test
     void correctlyRetrievePokemonShakespeareanDescription() throws IOException {
-
+        TestHelper testHelper = new TestHelper();
         String pokemonName = "Charmander";
         String description = "\"Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.\"";
         String expectedPokemonDescription = "Obviously prefers hot places. At which hour 't rains,  steam is did doth sayeth to spout from the tip of its tail.";
 
-        JsonNode pokedexResponseNodes = generateResponseNodes("pokedex-response.json");
-        JsonNode shakespeareResponseNodes = generateResponseNodes("shakespeare-response.json");
+        JsonNode pokedexResponseNodes = testHelper.generateResponseNodes("pokedex-response.json");
+        JsonNode shakespeareResponseNodes = testHelper.generateResponseNodes("shakespeare-response.json");
 
         when(pokedexConfig.getEndpoint()).thenReturn(POKEDEX_URL);
         when(restAPIService.restCall(POKEDEX_URL, pokemonName)).thenReturn(pokedexResponseNodes);
@@ -80,11 +77,12 @@ class PokemonServiceTest {
 
     @Test
     void returnsNoDescriptionIfShakespeareParsingFails() throws IOException {
+        TestHelper testHelper = new TestHelper();
         String pokemonName = "Charmander";
         String description = "\"Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.\"";
         String expectedPokemonDescription = "";
 
-        JsonNode pokedexResponseNodes = generateResponseNodes("pokedex-response.json");
+        JsonNode pokedexResponseNodes = testHelper.generateResponseNodes("pokedex-response.json");
 
         when(pokedexConfig.getEndpoint()).thenReturn(POKEDEX_URL);
         when(restAPIService.restCall(POKEDEX_URL, pokemonName)).thenReturn(pokedexResponseNodes);
@@ -97,13 +95,4 @@ class PokemonServiceTest {
             assertEquals(expectedPokemonDescription, p.getDescription());
         });
     }
-
-    private JsonNode generateResponseNodes(String fileName) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        String filePathPokedex = Paths.get("src", "test", "resources").toString() + separator + fileName;
-        String response = FileUtils.readFileToString(new File(filePathPokedex), "UTF-8");
-        return mapper.readTree(response);
-    }
-
-    //HERE - OTHER TESTS
 }
