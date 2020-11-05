@@ -22,7 +22,7 @@ public class RestAPIService {
     @Value("${useragent.value}")
     private String userAgentValue;
 
-    JsonNode restCall(String endpoint, String field, HttpMethod method) {
+    public JsonNode restCall(String endpoint, String field, HttpMethod httpMethod) {
         log.info("Performing rest call to {}", endpoint);
 
         RestTemplate restTemplate = new RestTemplate();
@@ -30,7 +30,7 @@ public class RestAPIService {
 
         ResponseEntity<String> response = restTemplate.exchange(
             endpoint + field,
-            method,
+            httpMethod,
             new HttpEntity<>(field, getHttpHeaders()),
             String.class);
 

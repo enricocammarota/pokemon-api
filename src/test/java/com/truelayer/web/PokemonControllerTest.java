@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Optional;
 
@@ -26,13 +27,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class PokemonControllerTest {
 
     private static final String GET_POKEMON_SHAKESPEAREAN_DESCRIPTION_URL = "/pokemon";
-    private static final String EXPECTED_DESCRIPTION = "qweqweqewewqeqwweqweq";
+    private static final String POKEDEX_API_URL = "http://foo";
 
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @MockBean
     private PokemonService pokemonService;
@@ -43,20 +41,24 @@ public class PokemonControllerTest {
     @Test
     void correctlyRetrievePokemonShakespeareanDescription() throws Exception {
         String pokemonName = "charizard";
+        String description = "strong and red dragon";
+        String expectedResponse = "{\"name\":\"charizard\",\"description\":\"strong and red dragon\"}";
 
-        when(pokedexConfig.getEndpoint()).thenReturn("https://pokeapi.co/api/v2/pokemon-species/");
-        when(pokemonService.getPokemonShakespeareanDescription(pokemonName)).thenReturn(Optional.of(new Pokemon("charizard", "strong and red dragon")));
+        when(pokedexConfig.getEndpoint()).thenReturn(POKEDEX_API_URL);
+        when(pokemonService.getPokemonShakespeareanDescription(pokemonName)).thenReturn(Optional.of(new Pokemon(pokemonName, description)));
+
         mockMvc.perform(get(GET_POKEMON_SHAKESPEAREAN_DESCRIPTION_URL + "/" + pokemonName))
             .andExpect(status().isOk())
-            .andExpect(content().json(objectMapper.writeValueAsString(EXPECTED_DESCRIPTION)));
+            .andExpect(content().string(expectedResponse));
     }
 
     @Test
     void returnsNotFoundIfThePokemonDoesNotExists() throws Exception {
         String pokemonName = "foo";
 
-        when(pokedexConfig.getEndpoint()).thenReturn("https://pokeapi.co/api/v2/pokemon-species/");
+        when(pokedexConfig.getEndpoint()).thenReturn(POKEDEX_API_URL);
         when(pokemonService.getPokemonShakespeareanDescription(pokemonName)).thenReturn(Optional.empty());
+
         mockMvc.perform(get(GET_POKEMON_SHAKESPEAREAN_DESCRIPTION_URL + "/" + pokemonName))
             .andExpect(status().isNotFound());
     }

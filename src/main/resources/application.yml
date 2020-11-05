@@ -3,18 +3,7 @@ server:
 spring:
   application:
     name: pokemon_api
-  cloud:
-    stream:
-      default:
-        group: pokemon-api
-        consumer:
-          headerMode: none
-        producer:
-          headerMode: none
-          retries: 3
-  cache:
-    jcache:
-      config: classpath:ehcache.xml
+
 management:
   endpoints:
     web:

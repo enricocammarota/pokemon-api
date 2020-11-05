@@ -32,8 +32,10 @@ There is a compose file you can use:
 - docker-compose.yml 
 
 The file is configured to run the application on port 8801 and therefore will be possible for you 
-to query the API through that port. 
+to query the API through that port. Please run:
 
 ```bash
 docker-compose up
 ```
+
+In order to be able to use the API.

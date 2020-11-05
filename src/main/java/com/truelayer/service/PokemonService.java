@@ -25,33 +25,45 @@ public class PokemonService {
 
     private final ShakespeareConfig shakespeareConfig;
 
-    private final String regEx = "[\\\\|\"]";
+    private static final String REG_EX_PATTERN = "[\\\\|\"]";
 
     @Autowired
     private final RestAPIService restAPIService;
 
     public Optional<Pokemon> getPokemonShakespeareanDescription(final String pokemonName) {
         String description = getDescription(pokemonName);
+
         return description == null ? empty() : Optional.of(new Pokemon(pokemonName, description));
     }
 
     private String getDescription(String pokemonName) {
         String pokedexDescription = getPokedexDescription(pokemonName);
+
         return pokedexDescription != null ? getShakespeareanDescription(pokemonName, pokedexDescription) : null;
     }
 
     private String getPokedexDescription(String pokemonName) {
         log.info("Querying Pokemon description for {} from pokedex", pokemonName);
+
         JsonNode rootNode = restAPIService.restCall(pokedexConfig.getEndpoint(), pokemonName, GET);
-        JsonNode responseNode = rootNode.findValue(pokedexConfig.getNodeToBeFound());
-        return PokedexResponseParser.pokedexAPIJsonParsing(pokemonName, responseNode);
+        if (rootNode != null) {
+            JsonNode responseNode = rootNode.findValue(pokedexConfig.getNodeToBeFound());
+            return PokedexResponseParser.pokedexAPIJsonParsing(pokemonName, responseNode);
+        } else {
+            return  null;
+        }
     }
 
     private String getShakespeareanDescription(String pokemonName, String pokedexDescription) {
         log.info("Querying Shakespearean description for {}", pokemonName);
+
         JsonNode rootNode = restAPIService.restCall(shakespeareConfig.getEndpoint(), pokedexDescription, POST);
-        JsonNode responseNode = rootNode.at(shakespeareConfig.getNodeToBeFound());
-        return responseNode.toString().replaceAll(regEx,"");
+        if (rootNode != null) {
+            JsonNode responseNode = rootNode.at(shakespeareConfig.getNodeToBeFound());
+            return responseNode.toString().replaceAll(REG_EX_PATTERN, "");
+        } else {
+            return null;
+        }
     }
 
 }

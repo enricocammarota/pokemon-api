@@ -13,9 +13,11 @@ import static java.util.Locale.ENGLISH;
 @Slf4j
 public final class PokedexResponseParser {
 
-    private static final String newLineRegEx = "\\\\n";
+    private static final String NEW_LINE_PATTERN = "\\\\n";
 
-    private static final String formFeedCharacterRegEx = "\\\\f";
+    private static final String FORM_FEED_PATTERN = "\\\\f";
+
+    private static final Random random = new Random();
 
     private PokedexResponseParser() {
 
@@ -27,16 +29,14 @@ public final class PokedexResponseParser {
         List<String> descriptions = new ArrayList<>();
         Iterator<JsonNode> descriptionsNodes = locatedNode.elements();
 
-        while (descriptionsNodes.hasNext()) {
-            JsonNode description = descriptionsNodes.next();
+        descriptionsNodes.forEachRemaining(description -> {
             if (description.at("/language/name").asText().equals(ENGLISH.getLanguage())) {
                 descriptions.add(description.get("flavor_text").toString()
-                    .replaceAll(newLineRegEx, "")
-                    .replaceAll(formFeedCharacterRegEx, ""));
+                    .replaceAll(NEW_LINE_PATTERN, "")
+                    .replaceAll(FORM_FEED_PATTERN, ""));
             }
-        }
+        });
 
-        Random random = new Random();
         log.info("Finished Pokedex response parsing for {}!", pokemonName);
         return descriptions.get(random.nextInt(descriptions.size()));
     }
