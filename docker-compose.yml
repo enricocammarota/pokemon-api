@@ -1,0 +1,10 @@
+version: '3.3'
+
+services:
+
+  truelayer-pokemon-api:
+    build: .
+    restart: always
+    image: local/truelayer-pokemon-api:latest
+    ports:
+      - 8080:8080

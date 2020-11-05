@@ -1,0 +1,41 @@
+server:
+  port: 8801
+spring:
+  application:
+    name: pokemon_service
+  cloud:
+    stream:
+      default:
+        group: pokemon-com.truelayer.service
+        consumer:
+          headerMode: none
+        producer:
+          headerMode: none
+          retries: 3
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  info:
+    git:
+      mode: full
+  health:
+    binders:
+      enabled: true
+  endpoint:
+    health:
+      show-details: always
+logging:
+  config: classpath:logback.xml
+
+pokedexapiurl:
+  endpoint: "https://pokeapi.co/api/v2/pokemon-species/"
+  nodetobefound: "flavor_text_entries"
+
+shakespeareapiurl:
+  endpoint: "https://api.funtranslations.com/translate/shakespeare.json?text="
+  nodetobefound: "/contents/translated"
