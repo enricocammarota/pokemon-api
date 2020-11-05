@@ -11,10 +11,10 @@
     </parent>
 
     <groupId>com.truelayer</groupId>
-    <artifactId>truelayer-interview</artifactId>
+    <artifactId>pokemon-api</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name></name>
-    <description></description>
+    <name>Pokemon Shakespearean API</name>
+    <description>A pokemon description retrieval with a little difference!</description>
 
     <properties>
         <java.version>8</java.version>
@@ -144,29 +144,6 @@
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>${pmd-maven-plugin.version}</version>
-                <configuration>
-                    <failOnViolation>true</failOnViolation>
-                    <printFailingErrors>true</printFailingErrors>
-                    <failurePriority>2</failurePriority>
-                    <includeTests>true</includeTests>
-                    <linkXRef>false</linkXRef>
-                    <rulesets>
-                        <ruleset>hbi-pmd-ruleset.xml</ruleset>
-                    </rulesets>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -312,7 +289,7 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <repository>local/truelayer/pokemon-com.truelayer.service</repository>
+                            <repository>local/truelayer/pokemon-api</repository>
                             <buildArgs>
                                 <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
                             </buildArgs>

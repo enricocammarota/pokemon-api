@@ -2,11 +2,11 @@ server:
   port: 8801
 spring:
   application:
-    name: pokemon_service
+    name: pokemon_api
   cloud:
     stream:
       default:
-        group: pokemon-com.truelayer.service
+        group: pokemon-api
         consumer:
           headerMode: none
         producer:
