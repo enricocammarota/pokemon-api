@@ -51,8 +51,7 @@ public class PokemonService {
         log.info("Querying Shakespearean description for {}", pokemonName);
         JsonNode rootNode = restAPIService.restCall(shakespeareConfig.getEndpoint(), pokedexDescription, POST);
         JsonNode responseNode = rootNode.at(shakespeareConfig.getNodeToBeFound());
-        return responseNode.toString()
-            .replaceAll(regEx,"");
+        return responseNode.toString().replaceAll(regEx,"");
     }
 
 }

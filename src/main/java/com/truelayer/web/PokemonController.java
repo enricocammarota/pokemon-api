@@ -36,7 +36,8 @@ public class PokemonController {
     @ApiResponses(value =
         {
             @ApiResponse(code = 200, message = "The request was successful and pokemon information are returned in the response", response = Map.class),
-            @ApiResponse(code = 404, message = "The Pokemon you searched doesn't exist")
+            @ApiResponse(code = 404, message = "The Pokemon you searched doesn't exist"),
+            @ApiResponse(code = 500, message = "Internal error during retrieval of Pokemon description. Please try again later.")
         })
     @GetMapping("/{pokemonName}")
     @ResponseStatus(HttpStatus.OK)

@@ -37,7 +37,7 @@ public final class PokedexResponseParser {
         }
 
         Random random = new Random();
-        log.info("Finished Pokedex response parsing!");
+        log.info("Finished Pokedex response parsing for {}!", pokemonName);
         return descriptions.get(random.nextInt(descriptions.size()));
     }
 }
