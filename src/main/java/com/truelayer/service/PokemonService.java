@@ -25,6 +25,8 @@ public class PokemonService {
 
     private final ShakespeareConfig shakespeareConfig;
 
+    private final String regEx = "[\\\\|\"]";
+
     @Autowired
     private final RestAPIService restAPIService;
 
@@ -39,18 +41,18 @@ public class PokemonService {
     }
 
     private String getPokedexDescription(String pokemonName) {
-        log.info("Querying pokemon description for {} from pokedex", pokemonName);
+        log.info("Querying Pokemon description for {} from pokedex", pokemonName);
         JsonNode rootNode = restAPIService.restCall(pokedexConfig.getEndpoint(), pokemonName, GET);
         JsonNode responseNode = rootNode.findValue(pokedexConfig.getNodeToBeFound());
         return PokedexResponseParser.pokedexAPIJsonParsing(pokemonName, responseNode);
     }
 
     private String getShakespeareanDescription(String pokemonName, String pokedexDescription) {
-        log.info("Parsing {} description in Shakespearean", pokemonName);
+        log.info("Querying Shakespearean description for {}", pokemonName);
         JsonNode rootNode = restAPIService.restCall(shakespeareConfig.getEndpoint(), pokedexDescription, POST);
         JsonNode responseNode = rootNode.at(shakespeareConfig.getNodeToBeFound());
         return responseNode.toString()
-            .replaceAll("[\\\\|\"]","");
+            .replaceAll(regEx,"");
     }
 
 }

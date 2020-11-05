@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -17,6 +18,9 @@ import java.util.Objects;
 @Service
 @Slf4j
 public class RestAPIService {
+
+    @Value("${useragent.value}")
+    private String userAgentValue;
 
     JsonNode restCall(String endpoint, String field, HttpMethod method) {
         log.info("Performing rest call to {}", endpoint);
@@ -43,8 +47,7 @@ public class RestAPIService {
     private HttpHeaders getHttpHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.add("user-agent",
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36");
+        headers.add("user-agent", userAgentValue);
         return headers;
     }
 }
