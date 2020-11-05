@@ -12,7 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -49,7 +48,7 @@ class RestAPIServiceTest {
         ResponseEntity<String> responseEntity = generateResponseEntity("pokedex-rest-response");
         JsonNode rootNode = generateResponseNodes("pokedex-response.json");
 
-        when(restTemplate.exchange(POKEDEX_URL + pokemonName, GET, new HttpEntity<>(pokemonName, getHttpHeaders()), String.class))
+        when(restTemplate.exchange(POKEDEX_URL + pokemonName, GET, new HttpEntity<>(pokemonName, new HttpHeaders()), String.class))
             .thenReturn(responseEntity);
         when(objectMapper.readTree(Objects.requireNonNull(responseEntity.getBody()))).thenReturn(rootNode);
 
@@ -65,8 +64,8 @@ class RestAPIServiceTest {
     }
 
     private ResponseEntity<String> generateResponseEntity(String fileName) throws IOException {
-        String filePathPodex = Paths.get("src", "test", "resources").toString() + separator + fileName;
-        return new ResponseEntity<>(FileUtils.readFileToString(new File(filePathPodex), "UTF-8"),
+        String filePathPokedex = Paths.get("src", "test", "resources").toString() + separator + fileName;
+        return new ResponseEntity<>(FileUtils.readFileToString(new File(filePathPokedex), "UTF-8"),
             HttpStatus.OK);
     }
 
@@ -77,10 +76,4 @@ class RestAPIServiceTest {
         return mapper.readTree(response);
     }
 
-    private HttpHeaders getHttpHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.add("user-agent", null);
-        return headers;
-    }
 }
